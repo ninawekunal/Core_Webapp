@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example for client side fetch</title>
+</head>
+<body>
+    <h1>Example for Client side fetch</h1>
+    <form id="inputForm">
+        <label for="inputText">Enter Text:</label>
+        <input type="text" id="inputText" name="inputText" required>
+        <button type="submit">Submit</button>
+    </form>
+    <div id="output"></div>
+
+    <script>
+        const form = document.getElementById('inputForm');
+        const outputDiv = document.getElementById('output');
+
+        form.addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const inputText = document.getElementById('inputText').value;
+
+            try {
+                const response = await fetch('/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ inputText })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch');
+                }
+
+                const data = await response.json();
+                outputDiv.textContent = `Response Text: ${data}`;
+            } catch (error) {
+                console.error('Error:', error);
+                outputDiv.textContent = 'An error occurred while fetching data.';
+            }
+        });
+    </script>
+</body>
+</html>
